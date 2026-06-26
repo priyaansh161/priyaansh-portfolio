@@ -445,21 +445,70 @@
     transform: translateY(0);
   }
 
+  /* HAMBURGER */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 4px;
+    background: none;
+    border: none;
+  }
+  .hamburger span {
+    display: block;
+    width: 22px;
+    height: 1px;
+    background: var(--black);
+    transition: all 0.3s ease;
+  }
+  .hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
   /* MOBILE */
   @media (max-width: 768px) {
     nav { padding: 0 24px; }
-    .nav-links { gap: 20px; }
+    .hamburger { display: flex; }
+    .nav-links {
+      display: none;
+      position: fixed;
+      top: 56px;
+      left: 0; right: 0;
+      background: var(--white);
+      border-bottom: 1px solid var(--black);
+      flex-direction: column;
+      gap: 0;
+      z-index: 99;
+    }
+    .nav-links.open { display: flex; }
+    .nav-links li a {
+      display: block;
+      padding: 18px 24px;
+      font-size: 12px;
+      letter-spacing: 0.2em;
+      border-bottom: 1px solid var(--gray-line);
+    }
     .hero { padding: 0 24px 48px; }
+    .hero-bg-text { display: none; }
     .section-inner { padding: 60px 24px; }
-    .exp-item { grid-template-columns: 1fr; gap: 16px; }
+    .section-label { flex-direction: column; align-items: flex-start; gap: 4px; }
+    .exp-item { grid-template-columns: 1fr; gap: 12px; }
+    .exp-role { font-size: 20px; }
     .project-block { grid-template-columns: 1fr; }
     .project-left { border-right: none; border-bottom: 1px solid var(--gray-line); }
-    .edu-grid { grid-template-columns: 1fr; }
-    .contact-inner { grid-template-columns: 1fr; gap: 48px; }
+    .project-name { font-size: 22px; }
+    .stat-number { font-size: 32px; }
+    .project-stats { flex-direction: row; flex-wrap: wrap; gap: 24px; }
+    .edu-grid { grid-template-columns: 1fr; gap: 24px; }
+    .edu-item { padding: 24px; }
+    .contact-inner { grid-template-columns: 1fr; gap: 40px; padding: 60px 24px; }
+    .contact-heading { font-size: clamp(48px, 14vw, 80px); }
     .skills-grid { grid-template-columns: 1fr; }
-    .skill-group { border-right: none; }
+    .skill-group { border-right: none; padding: 28px 24px; }
     .cert-list { grid-template-columns: 1fr; }
     .cert-item { border-right: none; }
+    footer { padding: 20px 24px; }
   }
 </style>
 </head>
@@ -468,7 +517,10 @@
 <!-- NAV -->
 <nav>
   <a href="#" class="nav-logo">P.M.</a>
-  <ul class="nav-links">
+  <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="nav-links">
     <li><a href="#about">About</a></li>
     <li><a href="#skills">Skills</a></li>
     <li><a href="#experience">Experience</a></li>
@@ -778,6 +830,21 @@
   }, { threshold: 0.1 });
 
   document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  const hamburger = document.getElementById('hamburger');
+  const navLinks = document.getElementById('nav-links');
+
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    navLinks.classList.toggle('open');
+  });
+
+  navLinks.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      hamburger.classList.remove('open');
+      navLinks.classList.remove('open');
+    });
+  });
 </script>
 </body>
 </html>
